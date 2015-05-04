@@ -16,11 +16,12 @@ dev:
 	@ACD_DEV=1 sh -c "'$(CURDIR)/scripts/build.sh'"
 
 quickdev:
-	@ACD_QUICKDEV=1 ACD_DEV=1 sh -c "'$(CURDIR)/scripts/build.sh'"
+	@ACD_SKIPDEPS=1 ACD_DEV=1 sh -c "'$(CURDIR)/scripts/build.sh'"
 
 # test runs the unit tests and vets the code
 test:
 	ACD_ACC= go test $(TEST) $(TESTARGS) -timeout=30s -parallel=4
+	@$(MAKE) fmt
 	@$(MAKE) vet
 
 # testacc runs acceptance tests
@@ -42,6 +43,12 @@ cover:
 	go test $(TEST) -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 	rm coverage.out
+
+# fmt formats the Go source code
+fmt:
+	@go list ./... \
+		| grep -v '.*github.com/sgeb/acdcli$$' \
+		| xargs go fmt
 
 # vet runs the Go source code static analysis tool `vet` to find
 # any common errors.

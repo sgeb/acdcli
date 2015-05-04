@@ -18,12 +18,16 @@ cd "$DIR"
 GIT_COMMIT=$(git rev-parse HEAD)
 GIT_DIRTY=$(test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 
+# Determine API keys
+ACD_API_CLIENTID=${ACD_API_CLIENTID:-"DEFAULT_API_CLIENTID"}
+ACD_API_SECRET=${ACD_API_SECRET:-"DEFAULT_API_SECRET"}
+
 # Determine the arch/os combos we're building for
 XC_ARCH=${XC_ARCH:-"386 amd64 arm"}
 XC_OS=${XC_OS:-linux darwin windows freebsd openbsd}
 
-# Get dependencies unless running in quick mode
-if [ "${ACD_QUICKDEV}x" == "x" ]; then
+# Get dependencies unless instructed to skip
+if [ "${ACD_SKIPDEPS}x" == "x" ]; then
     echo "==> Getting dependencies..."
     #go get -d ./...
     gpm
