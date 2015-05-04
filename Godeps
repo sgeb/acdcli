@@ -2,3 +2,6 @@
 
 github.com/sgeb/go-acd/acd
 golang.org/x/oauth2
+
+# Tool for cross-compiling
+github.com/mitchellh/gox
