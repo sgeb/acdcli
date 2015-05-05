@@ -1,7 +1,9 @@
 # Dependencies can by installed via [gpm](https://github.com/pote/gpm)
 
 github.com/sgeb/go-acd/acd
+
 golang.org/x/oauth2
+github.com/mitchellh/cli
 
 # Tool for cross-compiling
 github.com/mitchellh/gox

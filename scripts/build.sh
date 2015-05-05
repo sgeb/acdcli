@@ -50,7 +50,10 @@ echo "==> Building..."
 gox \
     -os="${XC_OS}" \
     -arch="${XC_ARCH}" \
-    -ldflags "-X main.GitCommit ${GIT_COMMIT}${GIT_DIRTY}" \
+    -ldflags \
+        "-X main.gitCommit ${GIT_COMMIT}${GIT_DIRTY} \
+        -X main.acdApiClientId ${ACD_API_CLIENTID} \
+        -X main.acdApiSecret ${ACD_API_SECRET}" \
     -output "pkg/{{.OS}}_{{.Arch}}/acdcli" \
     ./...
 

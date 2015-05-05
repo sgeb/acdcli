@@ -8,7 +8,7 @@
 
 // Debug support
 
-package main
+package client
 
 import (
 	"bytes"

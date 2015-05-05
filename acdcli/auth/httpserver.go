@@ -16,7 +16,7 @@
 
 // Implementation of a gracefully closing HTTP server
 
-package main
+package auth
 
 import (
 	"fmt"

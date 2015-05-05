@@ -36,6 +36,11 @@ testacc:
 testrace:
 	ACD_ACC= go test -race $(TEST) $(TESTARGS)
 
+# updatedeps installs all the dependencies needed to run
+# and build
+updatedeps:
+	@gpm
+
 cover:
 	@go tool cover 2>/dev/null; if [ $$? -eq 3 ]; then \
 		go get -u golang.org/x/tools/cmd/cover; \
