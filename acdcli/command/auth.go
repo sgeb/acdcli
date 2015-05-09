@@ -23,12 +23,17 @@ func (c *AuthCommand) Run(_ []string) int {
 	ctx := client.Context()
 	config := client.Config(c.AcdApiClientId, c.AcdApiSecret)
 
-	token := auth.TokenFromWeb(ctx, config)
-
-	cache := auth.NewCache(config)
-	err := cache.SaveToken(token)
+	token, err := auth.TokenFromWeb(ctx, config)
 	if err != nil {
 		c.Ui.Output(fmt.Sprintf("Cannot authorize: %s", err.Error()))
+		return 1
+	}
+
+	cache := auth.NewCache(config)
+	err = cache.SaveToken(token)
+	if err != nil {
+		c.Ui.Output(fmt.Sprintf("Cannot authorize: %s", err.Error()))
+		return 2
 	}
 
 	c.Ui.Output("Successfully authorized")

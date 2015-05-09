@@ -6,22 +6,22 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os/exec"
+	"strings"
 	"time"
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-	"strings"
 )
 
 const debug = false
 
-// TODO: better error handling needed
-func TokenFromWeb(ctx context.Context, config *oauth2.Config) *oauth2.Token {
+func TokenFromWeb(ctx context.Context, config *oauth2.Config) (*oauth2.Token, error) {
 	ch := make(chan string)
 	randState := fmt.Sprintf("st%d", time.Now().UnixNano())
 	if debug {
@@ -49,12 +49,16 @@ func TokenFromWeb(ctx context.Context, config *oauth2.Config) *oauth2.Token {
 
 	if config.RedirectURL != "" && strings.HasPrefix(config.RedirectURL, "http://") {
 		if ts.Listener != nil {
-			ts.Listener.Close()
+			err := ts.Listener.Close()
+			if err != nil {
+				return nil, err
+			}
 		}
 		laddress := config.RedirectURL[7:]
 		l, err := net.Listen("tcp", laddress)
 		if err != nil {
-			panic(fmt.Sprintf("Failed to listen on address %s: %v", laddress, err))
+			errMsg := fmt.Sprintf("Failed to listen on address %s: %v", laddress, err)
+			return nil, errors.New(errMsg)
 		}
 		ts.Listener = l
 	}
@@ -62,12 +66,11 @@ func TokenFromWeb(ctx context.Context, config *oauth2.Config) *oauth2.Token {
 	ts.Start()
 	defer ts.Close()
 
-	config.RedirectURL = ts.URL
 	if debug {
 		log.Printf("Redirect URL: %s", config.RedirectURL)
 	}
 	authURL := config.AuthCodeURL(randState)
-	log.Printf("Trying to authorize this app. If your browser does not open, please navigate directly to: %s", authURL)
+	fmt.Printf("Trying to authorize this app. If your browser does not open, please navigate directly to:\n\n%s\n\n", authURL)
 	go openURL(authURL)
 	code := <-ch
 	if debug {
@@ -76,7 +79,7 @@ func TokenFromWeb(ctx context.Context, config *oauth2.Config) *oauth2.Token {
 
 	token, err := config.Exchange(ctx, code)
 	if err != nil {
-		log.Fatalf("Token exchange error: %v", err)
+		return nil, errors.New(fmt.Sprintf("Token exchange error: %v", err))
 	}
 
 	// Amazon Cloud Drive might return lowercase "bearer", but
@@ -85,7 +88,7 @@ func TokenFromWeb(ctx context.Context, config *oauth2.Config) *oauth2.Token {
 		token.TokenType = "Bearer"
 	}
 
-	return token
+	return token, nil
 }
 
 func openURL(url string) {
