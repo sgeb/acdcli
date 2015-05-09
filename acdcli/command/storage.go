@@ -33,12 +33,13 @@ func (c *StorageCommand) Run(_ []string) int {
 		return 3
 	}
 
-	fmt.Printf("Last Calculated: %v (%v)\n",
+	fmt.Printf("Last calculated: %v (%v)\n",
 		humanize.Time(*accountUsage.LastCalculated), *accountUsage.LastCalculated)
 	fmt.Printf("%v\n", newStorageRow("Photos", accountUsage.Photo))
 	fmt.Printf("%v\n", newStorageRow("Video", accountUsage.Video))
 	fmt.Printf("%v\n", newStorageRow("Doc", accountUsage.Doc))
 	fmt.Printf("%v\n", newStorageRow("Other", accountUsage.Other))
+	fmt.Printf("%v\n", newTotalStorageRow("Total", accountUsage))
 
 	return 0
 }
@@ -63,6 +64,25 @@ func newStorageRow(title string, c *acd.CategoryUsage) storageRow {
 		billableSize:  *c.Billable.Bytes,
 		billableCount: *c.Billable.Count,
 	}
+}
+
+func newTotalStorageRow(title string, au *acd.AccountUsage) storageRow {
+	usages := []*acd.CategoryUsage{au.Photo, au.Video, au.Doc, au.Other}
+	return storageRow{
+		title:         title,
+		size:          storageSum(func(u *acd.CategoryUsage) uint64 { return *u.Total.Bytes }, usages...),
+		count:         storageSum(func(u *acd.CategoryUsage) uint64 { return *u.Total.Count }, usages...),
+		billableSize:  storageSum(func(u *acd.CategoryUsage) uint64 { return *u.Billable.Bytes }, usages...),
+		billableCount: storageSum(func(u *acd.CategoryUsage) uint64 { return *u.Billable.Count }, usages...),
+	}
+}
+
+func storageSum(f func(*acd.CategoryUsage) uint64, usages ...*acd.CategoryUsage) uint64 {
+	var result uint64 = 0
+	for _, usage := range usages {
+		result += f(usage)
+	}
+	return result
 }
 
 func (r storageRow) String() string {
