@@ -35,10 +35,10 @@ func (c *StorageCommand) Run(_ []string) int {
 
 	fmt.Printf("Last Calculated: %v (%v)\n",
 		humanize.Time(*accountUsage.LastCalculated), *accountUsage.LastCalculated)
-	fmt.Printf("%v\n", categoryUsageString("Photos", accountUsage.Photo))
-	fmt.Printf("%v\n", categoryUsageString("Video", accountUsage.Video))
-	fmt.Printf("%v\n", categoryUsageString("Doc", accountUsage.Doc))
-	fmt.Printf("%v\n", categoryUsageString("Other", accountUsage.Other))
+	fmt.Printf("%v\n", newStorageRow("Photos", accountUsage.Photo))
+	fmt.Printf("%v\n", newStorageRow("Video", accountUsage.Video))
+	fmt.Printf("%v\n", newStorageRow("Doc", accountUsage.Doc))
+	fmt.Printf("%v\n", newStorageRow("Other", accountUsage.Other))
 
 	return 0
 }
@@ -47,9 +47,27 @@ func (c *StorageCommand) Synopsis() string {
 	return "Prints information on storage usage and quota"
 }
 
-func categoryUsageString(category string, c *acd.CategoryUsage) string {
+type storageRow struct {
+	title         string
+	size          uint64
+	count         uint64
+	billableSize  uint64
+	billableCount uint64
+}
+
+func newStorageRow(title string, c *acd.CategoryUsage) storageRow {
+	return storageRow{
+		title:         title,
+		size:          *c.Total.Bytes,
+		count:         *c.Total.Count,
+		billableSize:  *c.Billable.Bytes,
+		billableCount: *c.Billable.Count,
+	}
+}
+
+func (r storageRow) String() string {
 	return fmt.Sprintf(" %8v %8v %9v  %8v %9v",
-		category,
-		humanize.IBytes(*c.Total.Bytes), humanize.Comma(int64(*c.Total.Count)),
-		humanize.IBytes(*c.Billable.Bytes), humanize.Comma(int64(*c.Billable.Count)))
+		r.title,
+		humanize.IBytes(r.size), humanize.Comma(int64(r.count)),
+		humanize.IBytes(r.billableSize), humanize.Comma(int64(r.billableCount)))
 }
