@@ -7,6 +7,9 @@ package command
 
 import (
 	"fmt"
+
+	"github.com/dustin/go-humanize"
+	"github.com/sgeb/go-acd/acd"
 )
 
 type StorageCommand struct {
@@ -30,23 +33,23 @@ func (c *StorageCommand) Run(_ []string) int {
 		return 3
 	}
 
-	fmt.Printf("Last Calculated: %v\n\n", *accountUsage.LastCalculated)
-	fmt.Printf("Other:\n Total: %v bytes (%v files)\n Billable: %v bytes (%v files)\n\n",
-		*accountUsage.Other.Total.Bytes, *accountUsage.Other.Total.Count,
-		*accountUsage.Other.Billable.Bytes, *accountUsage.Other.Billable.Count)
-	fmt.Printf("Doc:\n Total: %v bytes (%v files)\n Billable: %v bytes (%v files)\n\n",
-		*accountUsage.Doc.Total.Bytes, *accountUsage.Doc.Total.Count,
-		*accountUsage.Doc.Billable.Bytes, *accountUsage.Doc.Billable.Count)
-	fmt.Printf("Photo:\n Total: %v bytes (%v files)\n Billable: %v bytes (%v files)\n\n",
-		*accountUsage.Photo.Total.Bytes, *accountUsage.Photo.Total.Count,
-		*accountUsage.Photo.Billable.Bytes, *accountUsage.Photo.Billable.Count)
-	fmt.Printf("Video:\n Total: %v bytes (%v files)\n Billable: %v bytes (%v files)\n\n",
-		*accountUsage.Video.Total.Bytes, *accountUsage.Video.Total.Count,
-		*accountUsage.Video.Billable.Bytes, *accountUsage.Video.Billable.Count)
+	fmt.Printf("Last Calculated: %v (%v)\n",
+		humanize.Time(*accountUsage.LastCalculated), *accountUsage.LastCalculated)
+	fmt.Printf("%v\n", categoryUsageString("Photos", accountUsage.Photo))
+	fmt.Printf("%v\n", categoryUsageString("Video", accountUsage.Video))
+	fmt.Printf("%v\n", categoryUsageString("Doc", accountUsage.Doc))
+	fmt.Printf("%v\n", categoryUsageString("Other", accountUsage.Other))
 
 	return 0
 }
 
 func (c *StorageCommand) Synopsis() string {
 	return "Prints information on storage usage and quota"
+}
+
+func categoryUsageString(category string, c *acd.CategoryUsage) string {
+	return fmt.Sprintf(" %8v %8v %9v  %8v %9v",
+		category,
+		humanize.IBytes(*c.Total.Bytes), humanize.Comma(int64(*c.Total.Count)),
+		humanize.IBytes(*c.Billable.Bytes), humanize.Comma(int64(*c.Billable.Count)))
 }
