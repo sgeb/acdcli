@@ -15,7 +15,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-const debug = true
+const debug = false
 
 func NewClient(acdApiClientId, acdApiSecret string) (*acd.Client, error) {
 	ctx := Context()

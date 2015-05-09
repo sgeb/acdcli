@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-const debug = true
+const debug = false
 
 // TODO: better error handling needed
 func TokenFromWeb(ctx context.Context, config *oauth2.Config) *oauth2.Token {
