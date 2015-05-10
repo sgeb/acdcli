@@ -31,11 +31,14 @@ func NewClient(acdApiClientId, acdApiSecret string) (*acd.Client, error) {
 
 func Context() context.Context {
 	ctx := context.Background()
+
+	var innerTransport http.RoundTripper = http.DefaultTransport
 	if debug {
-		ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{
-			Transport: &logTransport{http.DefaultTransport},
-		})
+		innerTransport = &logTransport{innerTransport}
 	}
+	var transport http.RoundTripper = &BearerAuthTransport{innerTransport}
+
+	ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{Transport: transport})
 	return ctx
 }
 
