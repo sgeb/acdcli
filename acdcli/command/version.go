@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/cli"
-	"github.com/sgeb/go-acd/acd"
+	"github.com/sgeb/go-acd"
 )
 
 type VersionCommand struct {

@@ -7,6 +7,7 @@ package command
 
 import (
 	"fmt"
+
 	"github.com/sgeb/acdcli/acdcli/auth"
 	"github.com/sgeb/acdcli/acdcli/client"
 )

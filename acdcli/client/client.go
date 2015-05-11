@@ -10,7 +10,7 @@ import (
 	"net/http"
 
 	"github.com/sgeb/acdcli/acdcli/auth"
-	"github.com/sgeb/go-acd/acd"
+	"github.com/sgeb/go-acd"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 )

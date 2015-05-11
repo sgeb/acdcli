@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"github.com/dustin/go-humanize"
-	"github.com/sgeb/go-acd/acd"
+	"github.com/sgeb/go-acd"
 )
 
 type StorageCommand struct {

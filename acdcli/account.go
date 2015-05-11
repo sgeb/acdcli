@@ -13,7 +13,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sgeb/go-acd/acd"
+	"github.com/sgeb/go-acd"
 )
 
 var (

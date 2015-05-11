@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"github.com/mitchellh/cli"
 	"github.com/sgeb/acdcli/acdcli/client"
-	"github.com/sgeb/go-acd/acd"
+	"github.com/sgeb/go-acd"
 )
 
 // Meta contains the meta-options and functionality that nearly every
