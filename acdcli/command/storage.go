@@ -27,19 +27,37 @@ func (c *StorageCommand) Run(_ []string) int {
 		return 1
 	}
 
-	accountUsage, _, err := apiClient.Account.GetUsage()
+	quota, _, err := apiClient.Account.GetQuota()
 	if err != nil {
 		fmt.Printf("\nerror: %v\n\n", err)
 		return 3
 	}
 
-	fmt.Printf("Last calculated: %v (%v)\n",
-		humanize.Time(*accountUsage.LastCalculated), *accountUsage.LastCalculated)
-	fmt.Printf("%v\n", newStorageRow("Photos", accountUsage.Photo))
-	fmt.Printf("%v\n", newStorageRow("Video", accountUsage.Video))
-	fmt.Printf("%v\n", newStorageRow("Doc", accountUsage.Doc))
-	fmt.Printf("%v\n", newStorageRow("Other", accountUsage.Other))
-	fmt.Printf("%v\n", newTotalStorageRow("Total", accountUsage))
+	usage, _, err := apiClient.Account.GetUsage()
+	if err != nil {
+		fmt.Printf("\nerror: %v\n\n", err)
+		return 3
+	}
+
+	avail := *quota.Available
+	size := *quota.Quota
+	pctUsed := (1 - float64(avail)/float64(size)) * 100
+
+	fmt.Printf("Quota (last calculated %v)\n",
+		humanize.Time(*quota.LastCalculated))
+	fmt.Printf("Size: %v, Available: %v, Used: %.0f%%\n",
+		humanize.IBytes(size),
+		humanize.IBytes(avail),
+		pctUsed)
+
+	fmt.Println()
+
+	fmt.Printf("Usage (last calculated %v)\n", humanize.Time(*usage.LastCalculated))
+	fmt.Printf("%v\n", newStorageRow("Photos", usage.Photo))
+	fmt.Printf("%v\n", newStorageRow("Video", usage.Video))
+	fmt.Printf("%v\n", newStorageRow("Doc", usage.Doc))
+	fmt.Printf("%v\n", newStorageRow("Other", usage.Other))
+	fmt.Printf("%v\n", newTotalStorageRow("Total", usage))
 
 	return 0
 }
