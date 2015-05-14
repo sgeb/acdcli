@@ -1,6 +1,6 @@
 # Dependencies can by installed via [gpm](https://github.com/pote/gpm)
 
-github.com/sgeb/go-acd/acd
+github.com/sgeb/go-acd
 
 golang.org/x/oauth2
 github.com/mitchellh/cli
