@@ -23,6 +23,8 @@ import (
 	"os"
 
 	"github.com/mitchellh/cli"
+
+	"github.com/sgeb/acdcli/acdcli/debug"
 )
 
 var (
@@ -51,14 +53,20 @@ func main() {
 }
 
 func RunCustom(args []string, commands map[string]cli.CommandFactory) int {
+	// If "-debug" or "--debug" option, enable debug output.
+	for i, arg := range args {
+		if arg == "-debug" || arg == "--debug" {
+			debug.Debug = true
+			args = append(args[:i], args[i+1:]...)
+			break
+		}
+	}
+
 	// Get the command line args. We shortcut "--version" and "-v" to
 	// just show the version.
 	for _, arg := range args {
 		if arg == "-v" || arg == "-version" || arg == "--version" {
-			newArgs := make([]string, len(args)+1)
-			newArgs[0] = "version"
-			copy(newArgs[1:], args)
-			args = newArgs
+			args = append([]string{"version"}, args...)
 			break
 		}
 	}

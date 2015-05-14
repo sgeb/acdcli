@@ -17,14 +17,14 @@ import (
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-)
 
-const debug = false
+	"github.com/sgeb/acdcli/acdcli/debug"
+)
 
 func TokenFromWeb(ctx context.Context, config *oauth2.Config) (*oauth2.Token, error) {
 	ch := make(chan string)
 	randState := fmt.Sprintf("st%d", time.Now().UnixNano())
-	if debug {
+	if debug.Debug {
 		log.Printf("Starting redirect server")
 	}
 	ts := NewUnstartedServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
@@ -66,14 +66,14 @@ func TokenFromWeb(ctx context.Context, config *oauth2.Config) (*oauth2.Token, er
 	ts.Start()
 	defer ts.Close()
 
-	if debug {
+	if debug.Debug {
 		log.Printf("Redirect URL: %s", config.RedirectURL)
 	}
 	authURL := config.AuthCodeURL(randState)
 	fmt.Printf("Trying to authorize this app. If your browser does not open, please navigate directly to:\n\n%s\n\n", authURL)
 	go openURL(authURL)
 	code := <-ch
-	if debug {
+	if debug.Debug {
 		log.Printf("Got authorization code: %s", code)
 	}
 

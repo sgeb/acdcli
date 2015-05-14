@@ -9,13 +9,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sgeb/acdcli/acdcli/auth"
 	"github.com/sgeb/go-acd"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-)
 
-const debug = false
+	"github.com/sgeb/acdcli/acdcli/auth"
+	"github.com/sgeb/acdcli/acdcli/debug"
+)
 
 func NewClient(acdApiClientId, acdApiSecret string) (*acd.Client, error) {
 	ctx := Context()
@@ -33,7 +33,7 @@ func Context() context.Context {
 	ctx := context.Background()
 
 	var innerTransport http.RoundTripper = http.DefaultTransport
-	if debug {
+	if debug.Debug {
 		innerTransport = &logTransport{innerTransport}
 	}
 	var transport http.RoundTripper = &BearerAuthTransport{innerTransport}
@@ -60,7 +60,7 @@ func newOAuthClient(ctx context.Context, config *oauth2.Config) (*http.Client, e
 	if err != nil {
 		return nil, err
 	} else {
-		if debug {
+		if debug.Debug {
 			log.Printf("Using cached token %#v", token)
 		}
 	}
