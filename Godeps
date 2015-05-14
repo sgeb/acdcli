@@ -4,6 +4,7 @@ github.com/sgeb/go-acd
 
 golang.org/x/oauth2
 github.com/mitchellh/cli
+github.com/dustin/go-humanize
 
 # Tool for cross-compiling
 github.com/mitchellh/gox
