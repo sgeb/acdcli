@@ -1,7 +1,5 @@
-[![Build
+# acdcli [![Build
 Status](https://travis-ci.org/sgeb/acdcli.svg?branch=master)](https://travis-ci.org/sgeb/acdcli)
-
-# acdcli
 
 Command Line Interface tool for Amazon Cloud Drive.
 
