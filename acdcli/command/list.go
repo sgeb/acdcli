@@ -57,5 +57,5 @@ func (c *ListCommand) Run(_ []string) int {
 }
 
 func (c *ListCommand) Synopsis() string {
-	return "Prints information on storage usage and quota"
+	return "List files and folder in the root folder of the drive"
 }
