@@ -2,6 +2,42 @@
 
 Command Line Interface tool for Amazon Cloud Drive.
 
+## Installation
+
+Binary releases are made available upon reaching a milestone. No milestone has
+been reached yet, therefore no binaries. Fear not, acdcli can still be installed
+from source:
+
+``` bash
+# clone this repo
+% git clone https://github.com/sgeb/acdcli.git
+
+# get the right versions of dependencies (through gpm)
+# optional, is part of the two next commands
+% make updatedeps
+
+# compile binaries for your current platform
+% ACD_API_CLIENTID="your clientID" ACD_API_SECRET="your secret" make dev
+
+# compile binaries for all supported platforms
+% ACD_API_CLIENTID="your clientID" ACD_API_SECRET="your secret" make bin
+```
+
+You will need to register an API client for the Amazon Cloud Drive to get a
+clientID and secret. You can do so
+[here](https://developer.amazon.com/public/apis/experience/cloud-drive/content/getting-started).
+
+Note that invoking the line as written above will store your clientID and secret
+in your shell's history. It's safer to use a commandline-accessible password
+store (such as [pass](http://www.passwordstore.org/)) and invoke the line as
+follows:
+
+```
+% ACD_API_CLIENTID=$(pass ApiKeys/acdcli/clientid) ACD_API_SECRET=$(pass ApiKeys/acdcli/secret) make bin
+```
+
+Make sure to setup `pass` and adjust the path to the password file.
+
 ## Features
 
 Still work in progress. Focusing on read-only operations at first. See next
