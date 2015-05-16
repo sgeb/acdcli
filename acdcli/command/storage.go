@@ -104,7 +104,7 @@ func storageSum(f func(*acd.CategoryUsage) uint64, usages ...*acd.CategoryUsage)
 }
 
 func (r storageRow) String() string {
-	return fmt.Sprintf(" %8v %8v %9v  %8v %9v",
+	return fmt.Sprintf(" %8v  %6v %7v  %6v %7v",
 		r.title,
 		humanize.IBytes(r.size), humanize.Comma(int64(r.count)),
 		humanize.IBytes(r.billableSize), humanize.Comma(int64(r.billableCount)))
