@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/dustin/go-humanize"
 	"github.com/sgeb/go-acd"
 )
 
@@ -73,17 +74,24 @@ func (c *ListCommand) Run(args []string) int {
 
 	// print list of nodes
 	for _, node := range nodes {
+		size := "-"
+		if node.ContentProperties != nil && node.ContentProperties.Size != nil {
+			size = humanize.IBytes(*node.ContentProperties.Size)
+		}
+
+		name := ""
 		if node.Name != nil {
-			name := *node.Name
+			name = *node.Name
 			if _, ok := node.Typed().(*acd.Folder); ok {
 				name += "/"
 			}
-			c.Ui.Output(name)
 		} else if node.Id != nil {
-			c.Ui.Output(fmt.Sprintf("-> %v", *node.Id))
+			name = fmt.Sprintf("-> %v", *node.Id)
 		} else {
-			c.Ui.Output(fmt.Sprintf("?? %v", node))
+			name = fmt.Sprintf("?? %v", node)
 		}
+
+		c.Ui.Output(fmt.Sprintf(" %6v %v", size, name))
 	}
 
 	return 0
