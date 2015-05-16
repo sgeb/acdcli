@@ -80,7 +80,7 @@ Usage (last calculated 3 minutes ago)
     Total   124GiB    11,341        0B         0
 ```
 
-Listing items at the top-level folder (navigation to follow soon):
+Listing items at the top-level folder:
 
 ```
 % acdcli ls
@@ -91,6 +91,21 @@ Pictures/
 Shared/
 Videos/
 example.jpg
+```
+
+Listing items by specifying the folder (initial `/` is optional):
+
+```
+% acdcli ls /Documents
+Subfolder/
+sample.txt
+sample2.txt
+```
+
+Listing a specific file (initial `/` is optional):
+
+```
+% acdcli ls /Documents/sample.txt
 sample.txt
 ```
 
