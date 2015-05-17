@@ -8,7 +8,7 @@ Binary releases are made available upon reaching a milestone. No milestone has
 been reached yet, therefore no binaries. Fear not, acdcli can still be installed
 from source:
 
-``` bash
+```bash
 # clone this repo
 % git clone https://github.com/sgeb/acdcli.git
 
@@ -32,7 +32,7 @@ in your shell's history. It's safer to use a commandline-accessible password
 store (such as [pass](http://www.passwordstore.org/)) and invoke the line as
 follows:
 
-```
+```bash
 % ACD_API_CLIENTID=$(pass ApiKeys/acdcli/clientid) ACD_API_SECRET=$(pass ApiKeys/acdcli/secret) make bin
 ```
 
@@ -51,6 +51,7 @@ usage: acdcli [--version] [--help] <command> [<args>]
 
 Available commands are:
     auth       Authorizes access to your Amazon Cloud Drive account
+    info       Display a node's metadata
     ls         List files and folder in the root folder of the drive
     storage    Prints information on storage usage and quota
     version    Prints the acdcli version
@@ -60,7 +61,7 @@ Version:
 
 ```
 % acdcli version
-acdcli v0.1-dev (b35d3ba166af52def9356a5e05f812e56be5ef81)
+acdcli v0.1-dev (ba7a5df57e6c20b18e94c86ba11aff5d20cb53dd)
 using go-acd v0.1
 ```
 
@@ -69,44 +70,100 @@ zeroes in this example taken on an Umlimited Everything plan):
 
 ```
 % acdcli storage
-Quota (last calculated 3 minutes ago)
+Quota (last calculated 1 second ago)
 Size: 100TiB, Available: 100TiB, Used: 0%
 
-Usage (last calculated 3 minutes ago)
-   Photos    31GiB    10,820        0B         0
-    Video    56GiB       121        0B         0
-      Doc   9.3MiB        39        0B         0
-    Other    37GiB       361        0B         0
-    Total   124GiB    11,341        0B         0
+Usage (last calculated now)
+   Photos   31GiB  10,820      0B       0
+    Video   56GiB     121      0B       0
+      Doc  9.3MiB      40      0B       0
+    Other   37GiB     361      0B       0
+    Total  124GiB  11,342      0B       0
 ```
 
 Listing items at the top-level folder:
 
 ```
 % acdcli ls
-Archives/
-Backups/
-Documents/
-Pictures/
-Shared/
-Videos/
-example.jpg
+      - Archives/
+      - Backups/
+      - Documents/
+      - Pictures/
+      - Shared/
+      - Videos/
+ 700KiB example.jpg
+ 1.2MiB sample.doc
 ```
 
 Listing items by specifying the folder (initial `/` is optional):
 
 ```
-% acdcli ls /Documents
-Subfolder/
-sample.txt
-sample2.txt
+% acdcli ls /Documents/Samples
+      - Subfolder/
+ 2.7KiB Lorem Ipsum.txt
+  26KiB sample.jpg
+  20MiB sample.mp4
+    15B sample.txt
 ```
 
 Listing a specific file (initial `/` is optional):
 
 ```
-% acdcli ls /Documents/sample.txt
-sample.txt
+% acdcli ls /Documents/Samples/sample.mp4
+  20MiB sample.mp4
+```
+
+Display any node's metadata, works for files and folders. In case of a file,
+Amazon Cloud Drive might extract additional information.
+
+```json
+% acdcli info /Documents/Samples/sample.mp4
+{
+    "id": "6wDU-sqpRXSWOq1zYYPM0A",
+    "kind": "FILE",
+    "version": 12,
+    "labels": [],
+    "contentProperties": {
+        "contentDate": "1970-01-01T00:00:00.000Z",
+        "extension": "mp4",
+        "size": 21069678,
+        "video": {
+            "rotate": 0,
+            "bitrate": 1436830,
+            "audioCodec": "aac",
+            "creationDate": "1970-01-01T00:00:00.000Z",
+            "videoFrameRate": 25,
+            "encoder": "Lavf53.24.2",
+            "audioBitrate": 383869,
+            "audioSampleRate": 48000,
+            "audioChannelLayout": "5.1",
+            "duration": 117.312,
+            "videoBitrate": 1048652,
+            "audioChannels": 6,
+            "width": 1280,
+            "height": 720,
+            "videoCodec": "h264"
+        },
+        "contentType": "video/mp4",
+        "version": 1,
+        "md5": "442a2dc932b8a4a26ca12b73e796507b"
+    },
+    "createdDate": "2015-05-17T01:54:05.291Z",
+    "createdBy": "CloudDriveWeb",
+    "restricted": false,
+    "modifiedDate": "2015-05-17T01:55:16.621Z",
+    "name": "sample.mp4",
+    "isShared": false,
+    "properties": {
+        "CloudDrive": {
+            "Processing": "VIDEO_PROCESSED"
+        }
+    },
+    "parents": [
+        "L_9wVa74QWyYmqJITeYmhw"
+    ],
+    "status": "AVAILABLE"
+}
 ```
 
 ## Planned features
