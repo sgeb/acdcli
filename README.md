@@ -1,6 +1,6 @@
 # acdcli [![Build Status](https://travis-ci.org/sgeb/acdcli.svg?branch=master)](https://travis-ci.org/sgeb/acdcli)
 
-Command Line Interface tool for Amazon Cloud Drive.
+Command line tool for Amazon Cloud Drive.
 
 ## Installation
 
@@ -23,8 +23,9 @@ from source:
 % ACD_API_CLIENTID="your clientID" ACD_API_SECRET="your secret" make bin
 ```
 
-You will need to register an API client for the Amazon Cloud Drive to get a
-clientID and secret. You can do so
+The binaries will be released with API keys embedded and the tool ready to be
+used. But when building from source you will need to register an API client for
+the Amazon Cloud Drive to get a clientID and secret. You can do so
 [here](https://developer.amazon.com/public/apis/experience/cloud-drive/content/getting-started).
 
 Note that invoking the line as written above will store your clientID and secret
@@ -213,8 +214,8 @@ The following is a rough list of milestones:
 acdcli uses code, ideas and inspiration from the following projects:
 
 * [go-github](https://github.com/google/go-github)
-* [Terraform](https://www.terraform.io/)
 * [google-api-go-client](https://github.com/google/google-api-go-client)
+* [Terraform](https://www.terraform.io/)
 
 Thanks to the original authors for making their code available. Without their
 contributions to open source, acdcli would not have turned out the way it has.
