@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/sgeb/go-acd"
+	"os"
 )
 
 type DownloadCommand struct {
@@ -66,6 +67,13 @@ func (c *DownloadCommand) Run(args []string) int {
 	outputPath := *targetNode.Name
 	if len(args) > 1 {
 		outputPath = args[1]
+
+		fi, err := os.Stat(outputPath)
+		if err == nil {
+			if fi.IsDir() {
+				outputPath += fmt.Sprintf("/%s", *targetNode.Name)
+			}
+		}
 	}
 
 	// download
