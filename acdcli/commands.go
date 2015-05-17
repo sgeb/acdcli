@@ -44,6 +44,11 @@ func Commands() map[string]cli.CommandFactory {
 				Meta: *meta,
 			}, nil
 		},
+		"info": func() (cli.Command, error) {
+			return &command.InfoCommand{
+				Meta: *meta,
+			}, nil
+		},
 		"version": func() (cli.Command, error) {
 			return &command.VersionCommand{
 				AppName:           AppName,
