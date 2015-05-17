@@ -51,18 +51,11 @@ usage: acdcli [--version] [--help] <command> [<args>]
 
 Available commands are:
     auth       Authorizes access to your Amazon Cloud Drive account
+    get        Download files
     info       Display a node's metadata
     ls         List files and folder in the root folder of the drive
     storage    Prints information on storage usage and quota
     version    Prints the acdcli version
-```
-
-Version:
-
-```
-% acdcli version
-acdcli v0.1-dev (ba7a5df57e6c20b18e94c86ba11aff5d20cb53dd)
-using go-acd v0.1
 ```
 
 Storage information, the forth and fifth columns are billable storage (displays
@@ -111,6 +104,24 @@ Listing a specific file (initial `/` is optional):
 ```
 % acdcli ls /Documents/Samples/sample.mp4
   20MiB sample.mp4
+```
+
+Download a file to current directory:
+
+```
+% acdcli get /Documents/Samples/sample.jpg
+```
+
+Download a file to `/tmp/some/folder` (output directory must exist):
+
+```
+% acdcli get /Documents/Samples/sample.jpg /tmp/some/folder
+```
+
+Download a file to a local name (output directory must exist):
+
+```
+% acdcli get /Documents/Samples/sample.jpg /tmp/some/folder/downloaded.jpg
 ```
 
 Display any node's metadata, works for files and folders. In case of a file,
@@ -164,6 +175,14 @@ Amazon Cloud Drive might extract additional information.
     ],
     "status": "AVAILABLE"
 }
+```
+
+Version:
+
+```
+% acdcli version
+acdcli v0.1-dev (6c9065149252edcb9ff212296bc4b514e0bb12bb)
+using go-acd v0.1
 ```
 
 ## Planned features
