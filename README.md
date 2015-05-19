@@ -4,9 +4,15 @@ Command line tool for Amazon Cloud Drive.
 
 ## Installation
 
-Binary releases are made available upon reaching a milestone. No milestone has
-been reached yet, therefore no binaries. Fear not, acdcli can still be installed
-from source:
+### From binary releases
+
+Binary releases are created upon reaching a milestone and made available on
+[Bintray](https://bintray.com/sgeb/acdcli/acdcli/). Download the version and
+architecture of your chosing, optionally verifying the signature and MD5 sums.
+Unzip the archive and you're ready to go. The `acdcli` executable (or
+`acdcli.exe` on Windows) is all you need to run, no external dependencies.
+
+### From source
 
 ```bash
 # clone this repo
