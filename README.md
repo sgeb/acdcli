@@ -12,6 +12,34 @@ architecture of your chosing, optionally verifying the signature and MD5 sums.
 Unzip the archive and you're ready to go. The `acdcli` executable (or
 `acdcli.exe` on Windows) is all you need to run, no external dependencies.
 
+#### Verify the GPG signature (optional)
+
+Download the `acdcli_VERSION_SHA256SUMS.sig` and `acdcli_VERSION_SHA256SUMS`
+files from [Bintray](https://bintray.com/sgeb/acdcli/acdcli/) (the following
+examples assume `VERSION` to be `0.1.0`). The public key for the signature is
+available as ASCII-armored [`.asc`](http://sgeb.io/gpg/1FCE89F3.asc) file and as
+binary [`.gpg`](http://sgeb.io/gpg/1FCE89F3.gpg) file.
+
+You can either import the `.asc` file into your keyring and run:
+
+```bash
+% gpg --verify acdcli_0.1.0_SHA256SUMS.sig acdcli_0.1.0_SHA256SUMS
+```
+
+Or you can use the `.gpg` file directly as keyring and skip importing the key
+into your keyring:
+
+```bash
+% gpg --no-default-keyring --keyring 1FCE89F3.gpg --verify acdcli_0.1.0_SHA256SUMS.sig acdcli_0.1.0_SHA256SUMS
+```
+
+In both cases the result should be similar to the following:
+
+```
+gpg: Signature made Tue May 19 23:51:05 2015 CEST using RSA key ID 1FCE89F3
+gpg: Good signature from "Serge Gebhardt <serge.gebhardt@gmail.com>"
+```
+
 ### From source
 
 ```bash
